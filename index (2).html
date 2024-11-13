@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sustainable Solutions Chatbot</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+        .chatbox {
+            width: 100%;
+            max-width: 450px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        .chat-header {
+            background: #0072ff;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .chat-header img {
+            width: 25px;
+            margin-right: 10px;
+        }
+        .messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #f9f9f9;
+        }
+        .message {
+            margin: 10px 0;
+            padding: 12px 18px;
+            border-radius: 10px;
+            max-width: 80%;
+            position: relative;
+            animation: fadeIn 0.5s ease;
+            font-size: 0.95em;
+            line-height: 1.4;
+        }
+        .message.bot {
+            background-color: #e9f5ff;
+            text-align: left;
+            color: #333;
+            margin-left: 10px;
+        }
+        .message.user {
+            background-color: #0072ff;
+            color: white;
+            text-align: right;
+            margin-left: auto;
+            margin-right: 10px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .input-area {
+            display: flex;
+            padding: 15px;
+            border-top: 1px solid #eee;
+            background: #f1f1f1;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        input[type="text"]:focus {
+            border-color: #0072ff;
+        }
+        button {
+            margin-left: 10px;
+            padding: 10px 15px;
+            background-color: #0072ff;
+            border: none;
+            border-radius: 20px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #005bb5;
+        }
+    </style>
+</head>
+<body>
+
+<div class="chatbox">
+    <div class="chat-header">
+        <img src="https://img.icons8.com/clouds/50/000000/earth-planet.png" alt="Earth icon">
+        Eco-Solutions Assistant
+    </div>
+    <div class="messages" id="messages"></div>
+    <div class="input-area">
+        <input type="text" id="userInput" placeholder="Type your answer..." />
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<script>
+    const messagesContainer = document.getElementById("messages");
+    const userInput = document.getElementById("userInput");
+
+    // Updated, creative questions and responses
+    const questions = [
+        "🌍 Hello! What’s your view on the current sanitation state in your area? (choices: lacking, average, excellent)",
+        "🚛 Does your neighborhood have regular waste collection? (reply: yes or no)",
+        "🌱 Do you spot any open drains or neglected waste? (reply: yes or no)",
+        "♻️ Are there any community-driven efforts for cleanliness that you're aware of?",
+        "🚰 Do you have access to clean drinking water in your area? (reply: yes or no)",
+        "♻️ Do you segregate your waste into recyclables and non-recyclables? (reply: yes or no)",
+        "🌿 Are there any recycling bins available in your neighborhood? (reply: yes or no)",
+        "🌍 Are there any local initiatives to reduce plastic waste in your area?",
+        "💧 Do you conserve water at home? If yes, how?",
+        "🧼 Are hygiene and sanitation education programs available in your community?"
+    ];
+
+    const solutions = {
+        "lacking": "💡 It's essential to raise awareness! Consider organizing a local clean-up or reaching out to local officials.",
+        "average": "🌿 Great start! You might improve it further with more community involvement in waste management.",
+        "excellent": "🎉 Wonderful! Encourage continued good practices and inspire others to join in!",
+        "noService": "🚛 Regular waste collection is vital! You could rally the community to request this service from local authorities.",
+        "openDrains": "⚠️ Open drains can pose health risks. See if there are local initiatives to address this, or talk to the community.",
+        "noWater": "💧 Access to clean drinking water is critical! If you're facing issues, raising awareness or contacting local officials might help.",
+        "noSegregation": "♻️ Segregating waste is a good habit! Consider setting up separate bins for recyclables and non-recyclables.",
+        "noRecyclingBins": "🌱 Recycling bins are important for waste segregation. You could request the local authorities to install them.",
+        "noPlasticInitiatives": "🌍 Reducing plastic waste can be impactful! Start by using alternatives like reusable bags, and encourage others to do the same.",
+        "noWaterConservation": "💧 Conserving water helps reduce overall consumption. Small actions like fixing leaks, using water-saving devices, or reusing water can make a difference.",
+        "noEducation": "🧼 Hygiene education is crucial for a healthy community. You might want to propose community workshops or collaborate with local health organizations."
+    };
+
+    const maintenanceTips = [
+        "1️⃣ Make cleanliness a daily habit: Regularly clean public areas to reduce health risks.",
+        "2️⃣ Promote waste segregation and recycling bins in your neighborhood for better waste management.",
+        "3️⃣ Support or initiate community clean-up events for collective efforts.",
+        "4️⃣ Educate about proper hygiene practices and waste management to ensure everyone contributes.",
+        "5️⃣ Set up compost bins to handle biodegradable waste sustainably and create useful compost."
+    ];
+
+    let step = 0;
+
+    function addMessage(text, sender) {
+        const message = document.createElement("div");
+        message.className = `message ${sender}`;
+        message.textContent = text;
+        messagesContainer.appendChild(message);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    function sendMessage() {
+        const userMessage = userInput.value.trim();
+        if (!userMessage) return;
+
+        addMessage(userMessage, "user");
+        userInput.value = "";
+
+        setTimeout(() => {
+            if (step < questions.length) {
+                if (step === 0) {
+                    if (userMessage.toLowerCase() === "lacking") addMessage(solutions.lacking, "bot");
+                    if (userMessage.toLowerCase() === "average") addMessage(solutions.average, "bot");
+                    if (userMessage.toLowerCase() === "excellent") addMessage(solutions.excellent, "bot");
+                }
+
+                if (step === 1 && userMessage.toLowerCase() === "no") {
+                    addMessage(solutions.noService, "bot");
+                }
+
+                if (step === 2 && userMessage.toLowerCase() === "yes") {
+                    addMessage(solutions.openDrains, "bot");
+                }
+
+                if (step === 4 && userMessage.toLowerCase() === "no") {
+                    addMessage(solutions.noWater, "bot");
+                }
+
+                if (step === 5 && userMessage.toLowerCase() === "no") {
+                    addMessage(solutions.noSegregation, "bot");
+                }
+
+                if (step === 6 && userMessage.toLowerCase() === "no") {
+                    addMessage(solutions.noRecyclingBins, "bot");
+                }
+
+                if (step === 7 && userMessage.toLowerCase() === "no") {
+                    addMessage(solutions.noPlasticInitiatives, "bot");
+                }
+
+                if (step === 8 && userMessage.toLowerCase() === "no") {
+                    addMessage(solutions.noWaterConservation, "bot");
+                }
+
+                if (step === 9 && userMessage.toLowerCase() === "no") {
+                    addMessage(solutions.noEducation, "bot");
+                }
+
+                step++;
+                addMessage(questions[step] || "🌿 Thanks for sharing! Here are some extra tips for maintaining a clean environment:", "bot");
+            } else if (step === questions.length) {
+                maintenanceTips.forEach(tip => addMessage(tip, "bot"));
+                step++;
+            }
+        }, 500);
+    }
+
+    addMessage("🌍 Hi! I’m here to help with sustainable solutions. Ready to start?", "bot");
+    addMessage(questions[0], "bot");
+</script>
+
+</body>
+</html>

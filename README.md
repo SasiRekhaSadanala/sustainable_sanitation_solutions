@@ -14,6 +14,7 @@ Database: MySQL
 -- install dependencies
 
 Usage:
+
 Run Chatbot
 
 Run ML Model
@@ -22,5 +23,7 @@ Start WebApp
 
 
 Impact
+
 Improved decision-making and resource efficiency in sanitation projects.
+
 Contributes to sustainability and enhanced sanitation access in underserved regions.

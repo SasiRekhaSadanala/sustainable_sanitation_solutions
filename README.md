@@ -1,8 +1,5 @@
 https://sustainable-sanitation-8wf42ba.gamma.site/      ---- link of the website
 
-
-
-
 The Sustainable Sanitation Solutions (SSS) project aims to improve decision-making systems in sanitation using AI/ML. By developing a chatbot and ML models, the project addresses real-world sanitation challenges, focusing on enhancing resource allocation, operational efficiency, and sustainability.
 
 Key Features
@@ -15,9 +12,12 @@ Libraries: scikit-learn, TensorFlow, Flask, Dialogflow
 Database: MySQL
 
 -- install dependencies
+
 Usage:
 Run Chatbot
+
 Run ML Model
+
 Start WebApp
 
 
